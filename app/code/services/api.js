@@ -1,24 +1,40 @@
 
-var API_URL = 'http://localhost:3001';
+var API_URL = 'http://vs-001.fgascon.com:3001';
 
 apiProvider.$inject = ['$http', 'session'];
 
-function apiProvider($http, auth){
+function apiProvider($http, session){
 	return {
 		request: function(options){
-			var headers = {};
-			var req = {};
+			var req = {
+				headers: {}
+			};
 			req.method = options.method || 'GET';
-			req.url = API_URL + options.uri;
+			req.url = options.uri.substr(0, 4) === 'http' ? options.uri : API_URL + options.uri;
 			if(options.data){
 				req.data = options.data;
 			}
 			if(!options.notoken){
-				req.headers = {
-					'X-Token': session.requireToken()
-				};
+				req.headers['X-Token'] = session.requireToken();
 			}
-			return $http(req);
+			return $http(req).then(function(result){
+				if(result.status >= 200 && result.status < 300){
+					return result.data;
+				}
+				throw new Error("Invalid result from API");
+			}, function(receivedError){
+				if(receivedError && receivedError.data && receivedError.config){
+					console.error('API error %d %s (%s)', receivedError.status, receivedError.statusText, receivedError.config.url);
+					var err = new Error(receivedError.data.message || receivedError.data.code);
+					if(receivedError.data.code){
+						err.code = receivedError.data.code;
+					}
+					throw err;
+				}else{
+					console.error('API error', receivedError);
+					throw receivedError;
+				}
+			});
 		},
 		get: function(uri, options){
 			options = options||{};
@@ -30,6 +46,7 @@ function apiProvider($http, auth){
 			options = options||{};
 			options.method = 'POST';
 			options.uri = uri;
+			options.data = data||{};
 			return this.request(options);
 		}
 	};

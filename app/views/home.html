@@ -1,0 +1,10 @@
+<div id="comities-list">
+	<h2>Comités</h2>
+	
+	<div class="comity" ng-repeat="comity in comities">
+		<h4>{{comity.name}}</h4>
+		<div class="btn-group">
+			<a href="#" ng-href="#/posts/{{comity.id}}" class="btn btn-default">Discussions</a>
+		</div>
+	</div>
+</div>

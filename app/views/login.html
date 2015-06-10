@@ -1,13 +1,16 @@
 <div id="login-form">
-	<form class="form" ng-submit="login()">
-		<div class="control-group">
-			<input type="text" class="form-control" ng-value="email" placeholder="Courriel">
+	<form class="form" ng-submit="$event.preventDefault();login();">
+		<div class="error" ng-show="errorMessage">
+			{{errorMessage}}
 		</div>
 		<div class="control-group">
-			<input type="password" class="form-control" ng-value="password" placeholder="Mot de passe">
+			<input type="text" class="form-control" ng-model="email" placeholder="Courriel">
+		</div>
+		<div class="control-group">
+			<input type="password" class="form-control" ng-model="password" placeholder="Mot de passe">
 		</div>
 		<div class="actions">
-			<input type="submit" class="btn btn-primary" value="Connexion" ng-click="login()">
+			<input type="submit" class="btn btn-primary" value="Connexion">
 		</div>
 	</form>
 </div>

@@ -1,10 +1,19 @@
 
-LoginCtrl.$inject = ['$scope', 'auth'];
+LoginCtrl.$inject = ['$scope', '$location', 'auth'];
 
-function LoginCtrl($scope, auth){
+function LoginCtrl($scope, $location, auth){
 	
 	$scope.login = function(){
-		auth.login($scope.email, $scope.password);
+		$scope.errorMessage = "";
+		auth.login($scope.email, $scope.password).then(function(){
+			$location.path('/');
+		}, function(err){
+			if(err.code === 'InvalidCredentials'){
+				$scope.errorMessage = "Courriel ou mot de passe invalide";
+			}else{
+				$scope.errorMessage = "Une erreur est survenue.";
+			}
+		});
 	};
 }
 

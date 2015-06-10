@@ -1,0 +1,28 @@
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Nom</th>
+			<th>Description</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="comity in comities">
+			<td>{{comity.name}}</td>
+			<td>{{comity.description}}</td>
+			<td></td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td><input type="text" class="form-control" ng-model="newComity.name" ng-disabled="addInProgress"></td>
+			<td><textarea class="form-control" ng-model="newComity.description" ng-disabled="addInProgress"></textarea></td>
+			<td><button class="btn btn-default" ng-click="addComity()" ng-disabled="addInProgress">Ajouter</button></td>
+		</tr>
+	</tfoot>
+</table>
+
+<div class="error" ng-show="errorMessage">
+	{{errorMessage}}
+</div>
