@@ -1,5 +1,5 @@
 
-var API_URL = 'http://vs-001.fgascon.com:3001';
+var API_URL = 'http://localhost:3001';
 
 apiProvider.$inject = ['$http', 'session'];
 

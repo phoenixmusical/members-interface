@@ -1,7 +1,7 @@
 
-authProvider.$inject = ['session', 'api', '$rootScope', '$q'];
+authProvider.$inject = ['session', 'api', '$rootScope', '$q', '$location'];
 
-function authProvider(session, api, $rootScope, $q){
+function authProvider(session, api, $rootScope, $q, $location){
 	var auth = {};
 	var loggedUser = null;
 	
@@ -43,9 +43,7 @@ function authProvider(session, api, $rootScope, $q){
 		});
 	};
 	
-	auth.setUser = function(user){
-		setUser(user);
-	};
+	auth.setUser = setUser;
 	
 	return auth;
 }
