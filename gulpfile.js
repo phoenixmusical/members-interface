@@ -9,7 +9,9 @@ var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var less = require('gulp-less');
 var sourcemaps = require('gulp-sourcemaps');
+var htmlReplace = require('gulp-html-replace');
 var serve = require('gulp-serve');
+var config = require('./config.json');
 
 gulp.task('default', ['build']);
 
@@ -23,6 +25,12 @@ gulp.task('clean', function(callback){
 
 gulp.task('index', ['clean'], function(callback){
 	return gulp.src('app/index.html')
+		.pipe(htmlReplace({
+			config: {
+				src: JSON.stringify(config),
+				tpl: '<script>CONFIG=%s;</script>'
+			}
+		}))
 		.pipe(gulp.dest('dist/'));
 });
 
@@ -37,7 +45,7 @@ gulp.task('styles', ['clean'], function(){
 		.pipe(less({
 			paths: [__dirname + '/app/less', __dirname+'/app']
 		}))
-		//.pipe(minifyCSS())
+		.pipe(minifyCSS())
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('dist/'));
 });
@@ -52,7 +60,7 @@ gulp.task('javascript', ['clean'], function() {
 		.pipe(source('app.js'))
 		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps: true}))
-			//.pipe(uglify())
+			.pipe(uglify())
 			.on('error', gutil.log)
 		.pipe(sourcemaps.write('./'))
 		.pipe(gulp.dest('dist/js/'));
